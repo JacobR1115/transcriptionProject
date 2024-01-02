@@ -28,16 +28,20 @@ public class UploadController {
 
         try {
             S3Util.uploadFile(fileName, multipart.getInputStream());
-            message = "Your file has been uploaded successfully!";
         } catch (Exception ex) {
             message = "Error uploading file: " + ex.getMessage();
         }
 
         try {
             S3Util.transcribeObject(fileName);
-            message = "Your file has been transcribed successfully!";
         } catch (Exception ex) {
             message = "Error transcribing file: " + ex.getMessage();
+        }
+
+        try {
+            message = S3Util.getTranscript(fileName);
+        } catch (Exception ex) {
+            message = "Error getting transcription" + ex.getMessage();
         }
 
         model.addAttribute("message", message);
